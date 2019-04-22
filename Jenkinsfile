@@ -5,7 +5,7 @@ pipeline {
     timestamps()
     buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '15')
     skipStagesAfterUnstable()
-    timeout(5)
+    timeout(30)
   }
 
   stages {
@@ -13,32 +13,23 @@ pipeline {
     stage('Build') {
       agent {
         docker {
-          image 'epitechcontent/epitest-docker'
+          image 'haskell:8.4.4'
         }
       }
       steps {
-        timeout(time: 10) {
-          sh 'echo ok'
-        }
+        sh 'make fclean'
+        sh 'make'
       }
     }
 
     stage('Tests') {
       agent {
         docker {
-          image 'epitechcontent/epitest-docker'
+          image 'haskell:8.4.4'
         }
       }
       steps {
-        // sh 'mkdir coverage_build'
-        retry(count: 3) {
-          timeout(time: 20) {
-            sh 'echo ok'
-          }
-        }
-        // sh 'gcovr -x > coverage_build/coverage.xml'
-        // cobertura coberturaReportFile: 'coverage_build/coverage.xml', conditionalCoverageTargets: '70, 0, 0', failNoReports: false, failUnhealthy: false, failUnstable: false, lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 5, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII'
-        // junit 'report/*.xml'
+        sh 'make tests_run_coverage'
       }
     }
 
