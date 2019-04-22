@@ -13,7 +13,7 @@ pipeline {
     stage('Build') {
       agent {
         docker {
-          image 'epitechcontent/epitest-docker'
+          image 'haskell:8.4.4'
         }
       }
       steps {
@@ -25,7 +25,7 @@ pipeline {
     stage('Tests') {
       agent {
         docker {
-          image 'epitechcontent/epitest-docker'
+          image 'haskell:8.4.4'
         }
       }
       steps {
