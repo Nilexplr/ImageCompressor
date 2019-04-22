@@ -17,10 +17,8 @@ pipeline {
         }
       }
       steps {
-        timeout(time: 10) {
-          sh 'make fclean'
-          sh 'make'
-        }
+        sh 'make fclean'
+        sh 'make'
       }
     }
 
@@ -32,9 +30,7 @@ pipeline {
       }
       steps {
         retry(count: 3) {
-          timeout(time: 20) {
-            sh 'make tests_run_coverage'
-          }
+          sh 'make tests_run_coverage'
         }
       }
     }
