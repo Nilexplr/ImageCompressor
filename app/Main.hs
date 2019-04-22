@@ -1,6 +1,10 @@
-module Main where
+module Main
+    ( main
+    ) where
 
-import Lib
+import Argument
 
 main :: IO ()
-main = someFunc
+main = do
+    args <- Argument.handleArgument
+    print $ args
