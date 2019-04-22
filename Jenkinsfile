@@ -29,9 +29,7 @@ pipeline {
         }
       }
       steps {
-        retry(count: 3) {
-          sh 'make tests_run_coverage'
-        }
+        sh 'make tests_run_coverage'
       }
     }
 
