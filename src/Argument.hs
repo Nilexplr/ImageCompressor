@@ -1,18 +1,14 @@
 module Argument
-    ( handleArgument
+    ( ArgumentType(..)
+    , Options(..)
+    , handleArgument
     ) where
-
-import System.Environment(getArgs)
-import System.Console.GetOpt
-import Control.Monad
 
 {-
 Options data declaration
 -}
 data Options = Options
-    { helper            :: Bool
-    , version           :: Bool
-    , nbColors          :: Int
+    { nbColors          :: Int
     , convergenceLimit  :: Int
     , pathImage         :: String
     } deriving Show
@@ -22,37 +18,54 @@ Return a default Options data
 -}
 startOption :: Options
 startOption = Options
-    { helper            = False
-    , version           = False
-    , nbColors          = 0
+    { nbColors          = 0
     , convergenceLimit  = 0
     , pathImage         = ""
     }
 
-{-
-    Reference for the getOpt function
--}
-options :: [ OptDescr (Options -> Either String Options) ]
-options =
-    [ Option ['h'] ["help"] (NoArg (\opt -> Right opt { helper = True } )) "Display the program's usage"
-    , Option ['v'] ["version"] (NoArg (\opt -> Right opt { version = True } )) "Display the program's version"
-    ]
+{--
+Declaration of the Flag datatype used for GetOpt
+--}
+data ArgumentType =     Invalid
+                    |   Helper
+                    |   Version
+                    |   Other
+    deriving (Show, Enum)
 
 {-
 Main function of the argument handling
 -}
-handleArgument :: IO (Either [String] Options)
-handleArgument = do
-    argv <- getArgs
-    opt <- parseArguments argv
-    return opt
+handleArgument :: [String] -> IO (Either ArgumentType Options)
+handleArgument args = case parseArgument args of
+                    Right   t           -> do return $ Right t
+                    Left    (Helper)    -> do programUsage ; return $ Left Helper
+                    Left    (Version)   -> do programVersion ; return $ Left Version
+                    Left    (_)         -> do programInvalidArgs ; return $ Left Invalid
 
 {-
-Parse every argument and return either an error or
-the correct Options data
+Return the parsed argument
 -}
-parseArguments :: [String] -> IO (Either [String] Options)
-parseArguments argv = do
-    case getOpt Permute options argv of
-        ([], [], []) -> return $ Left ["no args"]
-        (_, _, err) -> return $ Left err
+parseArgument :: [String] -> Either ArgumentType Options
+parseArgument ["--help"]    = Left  Helper
+parseArgument ["--version"] = Left  Version
+parseArgument [c, l, f]     = Right Options { nbColors = (read c :: Int) , convergenceLimit = (read l :: Int) , pathImage = f }
+parseArgument _             = Left  Invalid
+
+{-
+Display the usage
+-}
+programUsage :: IO ()
+programUsage = do putStrLn "./imageCompressor [nb colors] [convergence limit] [path to file]"
+
+
+{-
+Display the program's version
+-}
+programVersion :: IO ()
+programVersion = do putStrLn "imageCompressor v0.0.1"
+
+{-
+Display invalid message error,
+-}
+programInvalidArgs :: IO ()
+programInvalidArgs = do putStrLn "the given arguments are invalid, please use the --help option"
