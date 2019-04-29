@@ -34,9 +34,9 @@ startOption = Options
 -}
 options :: [ OptDescr (Options -> Either String Options) ]
 options =
-    [ Option ['c'] ["check"] (NoArg (\opt -> Right opt { helper = True } )) "Check ok"
+    [ Option ['h'] ["help"] (NoArg (\opt -> Right opt { helper = True } )) "Display the program's usage"
+    , Option ['v'] ["version"] (NoArg (\opt -> Right opt { version = True } )) "Display the program's version"
     ]
--- DEBUG: This is a temporary version of the argument array
 
 {-
 Main function of the argument handling
