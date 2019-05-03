@@ -1,6 +1,17 @@
-module Main where
+module Main
+    ( main
+    ) where
 
-import Lib
+import System.Environment(getArgs)
+import System.Exit
+
+import Argument
 
 main :: IO ()
-main = someFunc
+main = do
+    argv <- getArgs
+    args <- handleArgument argv
+    case args of
+        Right   (opt)       -> do print $ opt
+        Left    (Invalid)   -> exitWith $ ExitFailure 84
+        _                   -> exitWith ExitSuccess
