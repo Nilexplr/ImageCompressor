@@ -22,4 +22,21 @@ containEmptyLine (x:xs)
         | otherwise     = containEmptyLine xs
 
 lineToPixel :: String -> Pixel
-lineToPixel l = Pixel { position = [], color = [] }
+lineToPixel l = Pixel { position = (getPosition (word1Position, word2Position)), color = (getColor (word1Color, word2Color, word3Color)) }
+        where   positionOnly    = (((words l) !! 0) \\ "()")
+                colorOnly       = (((words l) !! 1) \\ "()")
+                word1Position   = (words (map replaceComma positionOnly)) !! 0
+                word2Position   = (words (map replaceComma positionOnly)) !! 1
+                word1Color      = (words (map replaceComma colorOnly)) !! 0
+                word2Color      = (words (map replaceComma colorOnly)) !! 1
+                word3Color      = (words (map replaceComma colorOnly)) !! 2
+
+getPosition :: ([Char], [Char]) -> [Int]
+getPosition a = [(read (fst a) :: Int), (read (snd a) :: Int)]
+
+getColor :: ([Char], [Char], [Char]) -> [Int]
+getColor (a,b,c) = [(read a :: Int), (read b :: Int), (read c :: Int)]
+
+replaceComma :: Char -> Char
+replaceComma ','        = ' '
+replaceComma c          = c
