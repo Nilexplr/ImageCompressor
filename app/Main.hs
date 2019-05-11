@@ -16,6 +16,6 @@ main = do
     case args of
         Right   (opt)       -> do
                 c <- readFile (pathImage opt)
-                print (imgCompressor (parseFile c, nbColors opt, convergenceLimit opt))
+                print (imgCompressor (parseFile c, nbColors opt, convergenceLimit opt) [])
         Left    (Invalid)   -> exitWith $ ExitFailure 84
         _                   -> exitWith ExitSuccess
