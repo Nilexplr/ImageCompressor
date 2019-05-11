@@ -9,7 +9,7 @@ import Kmean
 imgCompressor :: ([Pixel], Int, Float) -> [Clustering] -> [Clustering]
 imgCompressor (img, n, e) [] =  imgCompressor (img, n, e) (applyKmean img (take n (repeat newCluster)))
 imgCompressor (img, n, e) clustering
-        | getConvergeance clustering newClustering e = imgCompressor (img, n, e) newClustering
+        | getConvergeance clustering newClustering e == False = imgCompressor (img, n, e) newClustering
         | otherwise = newClustering
             where
                 newClustering = applyKmean img newCluster
