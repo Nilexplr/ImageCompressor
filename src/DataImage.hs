@@ -5,5 +5,5 @@ module DataImage
 data Pixel = Pixel
     { position  :: [Int]
     , color     :: [Int]
-    } deriving Show
+    } deriving (Eq,Ord,Show)
 
