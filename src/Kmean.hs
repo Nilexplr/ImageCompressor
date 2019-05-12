@@ -6,6 +6,7 @@ module Kmean
 
 import DataImage
 import Data.List
+import Data.Maybe
 
 data Cluster = Cluster 
     { pos :: [Float]
@@ -17,12 +18,12 @@ data Clustering = Clustering
     } deriving (Eq, Show)
 
 
-distance :: [Int] -> [Int] -> Float
+distance :: [Int] -> [Float] -> Float
 distance x y = sqrt (x'*x' + y'*y' + z'*z')
     where
-        x' = fromIntegral (x !! 0) - fromIntegral (y !! 0)
-        y' = fromIntegral (x !! 1) - fromIntegral (y !! 1)
-        z' = fromIntegral (x !! 2) - fromIntegral (y !! 2)
+        x' = fromIntegral (x !! 0) - y !! 0
+        y' = fromIntegral (x !! 1) - y !! 1
+        z' = fromIntegral (x !! 2) - y !! 2
 
 mean :: [Pixel] -> Cluster
 mean pixel = Cluster { pos = [ sum r / y',  sum g / y',  sum b / y'] }
@@ -34,9 +35,25 @@ mean pixel = Cluster { pos = [ sum r / y',  sum g / y',  sum b / y'] }
             y' = fromIntegral (y + 1)
 
 applyKmean :: [Pixel] -> [Cluster] -> [Clustering]
-applyKmean a b =  take 1 (repeat Clustering { cluster = b !! 0, pixels = a})
+applyKmean a b =  linkKneighbor a b
 
 linkKneighbor :: [Pixel] -> [Cluster] -> [Clustering]
-linkKneighbor img clusterList = [createClustering img clusterList (clusterList !! i) | i <- take (length clusterList) [0,1..]]
+linkKneighbor img clusterList = [createClustering img clusterList i | i <- take (length clusterList) [0,1..]]
 
-createClustering :: [Pixel] -> [Cluster] -> Cluster -> [Clustering]
+createClustering :: [Pixel] -> [Cluster] -> Int -> Clustering
+createClustering img list x = Clustering { cluster = mean choosenPixel, pixels = choosenPixel}
+            where choosenPixel = findPixel img list x
+
+findPixel :: [Pixel] -> [Cluster] -> Int -> [Pixel]
+findPixel img list counter = [img !! i | i <- take (length img) [0,1..], minimalDist (img !! i) list == counter]
+
+minimalDist :: Pixel -> [Cluster] -> Int
+minimalDist pix list = findMinimum [distance (color pix) (pos (list !! i)) | i <-  take (length list) [0,1..]]
+
+findMinimum :: [Float] -> Int 
+findMinimum x = n
+        where 
+            n = case elemIndex y x of
+                Nothing -> -1
+                Just n  -> n
+            y = minimum x

@@ -42,4 +42,3 @@ newCluster = do
     let (f2, s3) = randomR (0, 255 :: Float) s2
     let (f3, _) = randomR (0, 255 :: Float) s3
     Cluster { pos = [f1 :: Float, f2 :: Float, f3 :: Float] }
-    
