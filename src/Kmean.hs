@@ -24,8 +24,8 @@ distance x y = sqrt (x'*x' + y'*y' + z'*z')
         y' = fromIntegral (x !! 1) - fromIntegral (y !! 1)
         z' = fromIntegral (x !! 2) - fromIntegral (y !! 2)
 
-mean :: [Pixel] -> [Float]
-mean pixel = [ sum r / y',  sum g / y',  sum b / y']
+mean :: [Pixel] -> Cluster
+mean pixel = Cluster { pos = [ sum r / y',  sum g / y',  sum b / y'] }
         where
             r = [fromIntegral (color (pixel !! i) !! 0) | i <- take y [0,1..]]
             g = [fromIntegral (color (pixel !! i) !! 1) | i <- take y [0,1..]]
@@ -35,3 +35,8 @@ mean pixel = [ sum r / y',  sum g / y',  sum b / y']
 
 applyKmean :: [Pixel] -> [Cluster] -> [Clustering]
 applyKmean a b =  take 1 (repeat Clustering { cluster = b !! 0, pixels = a})
+
+linkKneighbor :: [Pixel] -> [Cluster] -> [Clustering]
+linkKneighbor img clusterList = [createClustering img clusterList (clusterList !! i) | i <- take (length clusterList) [0,1..]]
+
+createClustering :: [Pixel] -> [Cluster] -> Cluster -> [Clustering]
