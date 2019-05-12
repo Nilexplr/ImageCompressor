@@ -31,8 +31,8 @@ mean pixel = Cluster { pos = [ sum r / y',  sum g / y',  sum b / y'] }
             r = [fromIntegral (color (pixel !! i) !! 0) | i <- take y [0,1..]]
             g = [fromIntegral (color (pixel !! i) !! 1) | i <- take y [0,1..]]
             b = [fromIntegral (color (pixel !! i) !! 2) | i <- take y [0,1..]]
-            y = length pixel - 1
-            y' = fromIntegral (y + 1)
+            y = length pixel
+            y' = fromIntegral (y)
 
 applyKmean :: [Pixel] -> [Cluster] -> [Clustering]
 applyKmean a b =  linkKneighbor a b

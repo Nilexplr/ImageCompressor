@@ -7,7 +7,7 @@ import System.Random
 import Kmean
 
 imgCompressor :: ([Pixel], Int, Float) -> [Clustering] -> [Clustering]
-imgCompressor (img, n, e) [] =  imgCompressor (img, n, e) (applyKmean img (take n (repeat newCluster)))
+imgCompressor (img, n, e) [] =  imgCompressor (img, n, e) (applyKmean img [newCluster i | i <- take n [0,1..]])
 imgCompressor (img, n, e) clustering
         | getConvergeance clustering newClustering e == False = imgCompressor (img, n, e) newClustering
         | otherwise = newClustering
@@ -35,9 +35,9 @@ eqCluster clusterA clusterB e
                 b' = abs (a !! 1 - b !! 1)
                 c' = abs (a !! 2 - b !! 2)        
 
-newCluster :: Cluster
-newCluster = do
-    let s1 = mkStdGen 42
+newCluster :: Int -> Cluster
+newCluster i = do
+    let s1 = mkStdGen i
     let (f1, s2) = randomR (0, 255 :: Float) s1
     let (f2, s3) = randomR (0, 255 :: Float) s2
     let (f3, _) = randomR (0, 255 :: Float) s3
