@@ -1,5 +1,5 @@
 module Compressor
-    ( imgCompressor        
+    ( imgCompressor
     ) where
 
 import DataImage
@@ -33,7 +33,7 @@ eqCluster clusterA clusterB e
                 b = pos clusterB
                 a' = abs (a !! 0 - b !! 0)
                 b' = abs (a !! 1 - b !! 1)
-                c' = abs (a !! 2 - b !! 2)        
+                c' = abs (a !! 2 - b !! 2)
 
 newCluster :: Int -> Cluster
 newCluster i = do

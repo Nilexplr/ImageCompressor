@@ -8,7 +8,7 @@ import DataImage
 import Data.List
 import Data.Maybe
 
-data Cluster = Cluster 
+data Cluster = Cluster
     { pos :: [Float]
     } deriving (Eq, Show)
 
@@ -50,9 +50,9 @@ findPixel img list counter = [img !! i | i <- take (length img) [0,1..], minimal
 minimalDist :: Pixel -> [Cluster] -> Int
 minimalDist pix list = findMinimum [distance (color pix) (pos (list !! i)) | i <-  take (length list) [0,1..]]
 
-findMinimum :: [Float] -> Int 
+findMinimum :: [Float] -> Int
 findMinimum x = n
-        where 
+        where
             n = case elemIndex y x of
                 Nothing -> -1
                 Just n  -> n
