@@ -26,8 +26,8 @@ getConvergeance old new e
 
 eqCluster :: Cluster -> Cluster -> Float -> Bool
 eqCluster clusterA clusterB e
-        | a' <= e && b' <= e && c' <= e = True
-        | otherwise                     = False
+        | a' > e && b' > e && c' > e    = False
+        | otherwise                     = True
             where
                 a = pos clusterA
                 b = pos clusterB
