@@ -41,7 +41,7 @@ linkKneighbor :: [Pixel] -> [Cluster] -> [Clustering]
 linkKneighbor img clusterList = [createClustering img clusterList i | i <- take (length clusterList) [0,1..]]
 
 createClustering :: [Pixel] -> [Cluster] -> Int -> Clustering
-createClustering img list x = Clustering { cluster = mean choosenPixel, pixels = choosenPixel}
+createClustering img list x = Clustering { cluster = if length choosenPixel > 0 then mean choosenPixel else list !! x, pixels = choosenPixel}
             where choosenPixel = findPixel img list x
 
 findPixel :: [Pixel] -> [Cluster] -> Int -> [Pixel]
