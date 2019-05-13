@@ -1,5 +1,6 @@
 module Kmean
     ( applyKmean
+    , mean
     , Cluster(..)
     , Clustering(..)
     ) where
