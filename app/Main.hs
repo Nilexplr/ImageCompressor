@@ -7,6 +7,8 @@ import System.Exit
 
 import Argument
 import FileParsing
+import Compressor
+import PrintCluster
 
 main :: IO ()
 main = do
@@ -15,6 +17,6 @@ main = do
     case args of
         Right   (opt)       -> do
                 c <- readFile (pathImage opt)
-                print $ parseFile c
+                printCluster (imgCompressor (parseFile c, nbColors opt, convergenceLimit opt) [])
         Left    (Invalid)   -> exitWith $ ExitFailure 84
         _                   -> exitWith ExitSuccess

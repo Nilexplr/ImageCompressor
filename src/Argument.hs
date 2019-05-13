@@ -9,7 +9,7 @@ Options data declaration
 -}
 data Options = Options
     { nbColors          :: Int
-    , convergenceLimit  :: Int
+    , convergenceLimit  :: Float
     , pathImage         :: String
     } deriving Show
 
@@ -48,7 +48,7 @@ Return the parsed argument
 parseArgument :: [String] -> Either ArgumentType Options
 parseArgument ["--help"]    = Left  Helper
 parseArgument ["--version"] = Left  Version
-parseArgument [c, l, f]     = Right Options { nbColors = (read c :: Int) , convergenceLimit = (read l :: Int) , pathImage = f }
+parseArgument [c, l, f]     = Right Options { nbColors = (read c :: Int) , convergenceLimit = (read l :: Float) , pathImage = f }
 parseArgument _             = Left  Invalid
 
 {-
