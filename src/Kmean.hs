@@ -1,5 +1,7 @@
 module Kmean
     ( applyKmean
+    , mean
+    , distanceF
     , Cluster(..)
     , Clustering(..)
     ) where
@@ -24,6 +26,13 @@ distance x y = sqrt (x'*x' + y'*y' + z'*z')
         x' = fromIntegral (x !! 0) - y !! 0
         y' = fromIntegral (x !! 1) - y !! 1
         z' = fromIntegral (x !! 2) - y !! 2
+
+distanceF :: [Float] -> [Float] -> Float
+distanceF x y = sqrt (x'*x' + y'*y' + z'*z')
+    where
+        x' = x !! 0 - y !! 0
+        y' = x !! 1 - y !! 1
+        z' = x !! 2 - y !! 2
 
 mean :: [Pixel] -> Cluster
 mean pixel = Cluster { pos = [ sum r / y',  sum g / y',  sum b / y'] }
